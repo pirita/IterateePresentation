@@ -1,4 +1,4 @@
-IterateePresentation
+Iteratee Presentation
 ====================
 
-Working with Iteratee
+Code for presentation about Iteratee in ScalaMad Meetup. 
