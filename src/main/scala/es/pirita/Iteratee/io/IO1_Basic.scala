@@ -10,8 +10,8 @@ package es.pirita.Iteratee.io
 trait IO1_Basic extends IO {
 
    override def numberWords(path: String): Int = {
-     val it = io.Source.fromFile(path).getLines()
-     var acc = 0
+     val it: Iterator[String] = io.Source.fromFile(path).getLines()
+     var acc: Int = 0
 
      while( it.hasNext ) {
        val line = it.next

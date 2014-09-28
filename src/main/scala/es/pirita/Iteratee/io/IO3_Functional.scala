@@ -9,8 +9,10 @@ package es.pirita.Iteratee.io
 trait IO3_Functional extends IO {
 
    override def numberWords(path: String): Int = {
-     val it = io.Source.fromFile(path).getLines()
-     it.map( line => line.trim.split(" ").length + 1).reduce(_+_)
+     val it: Iterator[String] = io.Source.fromFile(path).getLines()
+     it.map( line =>
+       line.trim.split(" ").length + 1).
+       fold(0)((acc: Int, el: Int) => acc + el)
    }
 
 }

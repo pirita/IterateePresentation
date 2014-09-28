@@ -22,25 +22,25 @@ import scala.concurrent.ExecutionContext.Implicits.global
 object Enumerator_7_Interleave_AndThen extends App
 {
 
-  val dataInt = List.range(1, 5).map(_.toString).iterator
-  val dataSt = List("☂", "❄", "☎", "T").iterator
+  val dataInt: Iterator[String] = List.range(1, 5).map(_.toString).iterator
+  val dataSt: Iterator[String] = List("☂", "❄", "☎", "T").iterator
 
-  val enumI = Enumerator.generateM{
+  val enumI: Enumerator[String] = Enumerator.generateM{
     Future{
       Thread.sleep(1000)
       if (dataInt.hasNext) Option(dataInt.next) else Option.empty[String]
     }
   }
 
-  val enumS = Enumerator.generateM{
+  val enumS: Enumerator[String] = Enumerator.generateM{
     Future{
       Thread.sleep(500)
       if (dataSt.hasNext) Option(dataSt.next) else Option.empty[String]
     }
   }
 
-  val fAndThen = enumI >>> enumS |>>> Iteratee.foreach(x => println(s"$x "))
-  val fInterleave = enumI >- enumS |>>> Iteratee.foreach(x => println(s"$x "))
+  val fAndThen: Future[Unit] = enumI >>> enumS |>>> Iteratee.foreach(x => println(s"$x "))
+  val fInterleave: Future[Unit] = enumI >- enumS |>>> Iteratee.foreach(x => println(s"$x "))
 
   Await.ready(fAndThen, Duration.Inf)
   Await.ready(fInterleave, Duration.Inf)

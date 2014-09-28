@@ -38,12 +38,12 @@ object Enumerator_8_Compose extends App
     }
   }
 
-  val enumCompose = for {
+  val enumCompose: Enumerator[String] = for {
     a <- enumI
     b <- enumS
   } yield a + b
 
-  val fCompose = enumCompose |>>> Iteratee.foreach(x => println(s"$x "))
+  val fCompose: Future[Unit] = enumCompose |>>> Iteratee.foreach(x => println(s"$x "))
 
   Await.ready(enumCompose |>>> Iteratee.foreach(x => println(s"$x ")), 10 seconds)
 }

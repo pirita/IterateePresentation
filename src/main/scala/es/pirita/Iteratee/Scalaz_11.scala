@@ -26,9 +26,9 @@ object Scalaz_11 extends App
     cont(step(0))
   }
 
-  val aux = (counter[Int] &= enumerate(Stream(1, 2, 3))).run
+  val countElements: Iteratee[Int, Int] = counter[Int] &= enumerate(Stream(1, 2, 3))
 
-  println(aux)
+  assert(countElements.run ==  3)
 
 }
 

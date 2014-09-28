@@ -12,6 +12,6 @@ import es.pirita.Iteratee.io._
 object Iteratee_1_IO extends App with IO{
   override def numberWords(path: String): Int = ???
 
-  println(numberWords("aux.txt"))
+  assert(numberWords(getClass.getClassLoader.getResource("aux.txt").getFile) == 248)
 }
 

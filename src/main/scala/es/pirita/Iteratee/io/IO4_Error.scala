@@ -10,10 +10,12 @@ trait IO4_Error extends IO {
 
    override def numberWords(path: String): Int =
    try{
-     val it = io.Source.fromFile(path).getLines()
-     it.map( line => line.trim.split(" ").length + 1).reduce(_+_)
+     val it: Iterator[String] = io.Source.fromFile(path).getLines()
+     it.map( line =>
+       line.trim.split(" ").length + 1).
+       fold(0)((acc: Int, el: Int) => acc + el)
    } catch {
-     case t: Throwable => -1
+     case t: Throwable => 0
    }
 
 }

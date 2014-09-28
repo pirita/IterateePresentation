@@ -27,22 +27,22 @@ object Enumeratee_10_Compose extends App
     acc + el.toFloat + 0.1f
   }
 
-  val enumeratee = Enumeratee.map[Int]{s => s.toString}
+  val enumeratee: Enumeratee[Int, String] = Enumeratee.map[Int]{s => s.toString}
 
   //--------
   //We can change the enumerator
   //--------
   val newEnumerator: Enumerator[String] = enum &> enumeratee
-  val futExampleEnumerator = newEnumerator |>>> iteratee01
-  println(Await.result(futExampleEnumerator, 10 seconds))
+  val futExampleEnumerator: Future[Float] = newEnumerator |>>> iteratee01
+  assert(Await.result(futExampleEnumerator, 10 seconds) == 45.899998f)
 
 
   //--------
   //We can apply it to an Iteratee
   //--------
   val newIteratee: Iteratee[Int, Float] = enumeratee &>> iteratee01
-  val futExampleIteratee = enum |>>> newIteratee
-  println(Await.result(futExampleIteratee, 10 seconds))
+  val futExampleIteratee: Future[Float] = enum |>>> newIteratee
+  assert(Await.result(futExampleIteratee, 10 seconds) == 0.0f)
 
 
 
@@ -55,12 +55,12 @@ object Enumeratee_10_Compose extends App
   val iterateeCompose: Iteratee[Int, Int] = Iteratee.fold[Int, Int](0){ (acc, el) =>
     acc + el
   }
-  val enumerateeFilter = Enumeratee.filter[Int]( x => x % 2 == 0)
-  val enumerateeInt = Enumeratee.map[String](x => x.toInt)
-  val enumerateeCompose = enumerateeInt ><> enumerateeFilter
+  val enumerateeFilter: Enumeratee[Int, Int] = Enumeratee.filter[Int]( x => x % 2 == 0)
+  val enumerateeInt: Enumeratee[String, Int] = Enumeratee.map[String](x => x.toInt)
+  val enumerateeCompose: Enumeratee[String, Int] = enumerateeInt ><> enumerateeFilter
 
-  val futEnumerateeCompose = enumCompose &> enumerateeCompose |>>> newIteratee
-  println(Await.result(futEnumerateeCompose, 10 seconds))
+  val futEnumerateeCompose: Future[Float] = enumCompose &> enumerateeCompose |>>> newIteratee
+  assert(Await.result(futEnumerateeCompose, 10 seconds) == 6.2f)
 
   //Differences betwee ><> and >+>
   //><> Drops after Done

@@ -2,7 +2,7 @@ package es.pirita.Iteratee
 
 import play.api.libs.iteratee._
 
-import scala.concurrent.Await
+import scala.concurrent.{Future, Await}
 
 import scala.concurrent.duration._
 
@@ -21,7 +21,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 object Iteratee_3_Odd extends App
 {
 
-  val enum = Enumerator.enumerate(List.range(1, 10))
+  val enum: Enumerator[Int] = Enumerator.enumerate(List.range(1, 10))
 
   def odd[E]: Iteratee[E, List[E]] = {
     def step(s: List[Option[E]])(i: Input[E]): Iteratee[E, List[E]] = i match {
@@ -36,9 +36,9 @@ object Iteratee_3_Odd extends App
     Cont[E, List[E]](i => step(List(Option.empty[E]))(i))
   }
 
-  val futExample = enum |>>> odd
+  val futExample: Future[List[Int]] = enum |>>> odd
 
-  println(Await.result(futExample, 10 seconds))
+  assert(Await.result(futExample, 10 seconds) == List(1, 3, 5, 7, 9))
 }
 
 

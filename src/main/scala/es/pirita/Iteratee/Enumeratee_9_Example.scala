@@ -18,7 +18,7 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 
 
-object Enumeratee_9_Example extends App
+object  Enumeratee_9_Example extends App
 {
   val enum: Enumerator[Int]  = Enumerator.enumerate(List.range(1, 10))
 
@@ -32,8 +32,8 @@ object Enumeratee_9_Example extends App
   val enumeratee: Enumeratee[Int, String] = Enumeratee.map[Int]{s => s.toString}
   val enumerator: Enumerator[String] = enum &> enumeratee
 
-  val futExampleEnumerator = enumerator |>>> iteratee
-  println(Await.result(futExampleEnumerator, 10 seconds))
+  val futExampleEnumerator: Future[Float] = enumerator |>>> iteratee
+  assert(Await.result(futExampleEnumerator, 10 seconds)==45.899998f)
 
 }
 
